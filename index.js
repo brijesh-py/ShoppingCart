@@ -68,12 +68,20 @@ function deleteProduct(cartArr, productId) {
   return cartArr?.filter((product) => product?.productId !== productId);
 }
 
-function getTotal(cartArr, key) {
+function getTotalQuantity(cartArr) {
   let totalQuantity = 0;
   for (let product in cartArr) {
-    totalQuantity += cartArr[product][key];
+    totalQuantity += cartArr[product].quantity;
   }
   return totalQuantity;
+}
+
+function getTotalPrice(cartArr) {
+  let totalPrice = 0;
+  for (let product in cartArr) {
+    totalPrice += cartArr[product].price * cartArr[product].quantity;
+  }
+  return totalPrice;
 }
 
 // Routes
@@ -166,7 +174,7 @@ cartRouter.get('/total-quantity', (req, res) => {
 // Endpoint 6: Calculate Total Price of Items in the Cart
 cartRouter.get('/total-price', (req, res) => {
   errorHandler(res, () => {
-    const totalPrice = getTotal(cart, 'price');
+    const totalPrice = getTotalPrice(cart);
     res.status(HTTP_STATUS_CODES?.RESPONSE_OK).json({
       status: HTTP_STATUS_CODES?.RESPONSE_OK,
       totalPrice,
